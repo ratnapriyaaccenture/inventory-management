@@ -4,6 +4,9 @@ from typing import List, Optional
 from pydantic import BaseModel
 from mock_data import inventory_items, orders, demand_forecasts, backlog_items, spending_summary, monthly_spending, category_spending, recent_transactions, purchase_orders
 
+# In-memory restocking orders — starts empty each server restart
+restocking_orders: List[dict] = []
+
 app = FastAPI(title="Factory Inventory Management System")
 
 # Quarter mapping for date filtering
@@ -119,6 +122,28 @@ class CreatePurchaseOrderRequest(BaseModel):
     unit_cost: float
     expected_delivery_date: str
     notes: Optional[str] = None
+
+class RestockingOrderItem(BaseModel):
+    sku: str
+    item_name: str
+    quantity: int
+    unit_cost: float
+    line_total: float
+
+class RestockingOrder(BaseModel):
+    id: str
+    created_date: str
+    budget: float
+    total_cost: float
+    items: List[RestockingOrderItem]
+    expected_delivery_date: str
+    status: str
+
+class CreateRestockingOrderRequest(BaseModel):
+    budget: float
+    items: List[RestockingOrderItem]
+    total_cost: float
+    expected_delivery_date: str
 
 # API endpoints
 @app.get("/")
@@ -303,6 +328,29 @@ def get_monthly_trends():
     result = list(months.values())
     result.sort(key=lambda x: x['month'])
     return result
+
+@app.get("/api/restocking-orders", response_model=List[RestockingOrder])
+def get_restocking_orders():
+    """Get all submitted restocking orders"""
+    return restocking_orders
+
+
+@app.post("/api/restocking-orders", response_model=RestockingOrder, status_code=201)
+def create_restocking_order(request: CreateRestockingOrderRequest):
+    """Submit a new restocking order"""
+    from datetime import datetime
+    new_order = {
+        "id": str(len(restocking_orders) + 1),
+        "created_date": datetime.utcnow().strftime("%Y-%m-%d"),
+        "budget": request.budget,
+        "total_cost": request.total_cost,
+        "items": [item.dict() for item in request.items],
+        "expected_delivery_date": request.expected_delivery_date,
+        "status": "Submitted"
+    }
+    restocking_orders.append(new_order)
+    return new_order
+
 
 if __name__ == "__main__":
     import uvicorn

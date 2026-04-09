@@ -8,7 +8,7 @@
     <div v-if="loading" class="loading">{{ t('common.loading') }}</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else>
-      <div class="card">
+      <div class="card" :style="{ '--anim-delay': '0ms' }">
         <div class="card-header">
           <h3 class="card-title">{{ t('inventory.stockLevels') }} ({{ filteredItems.length }} {{ t('inventory.skus') }})</h3>
           <div class="search-box">
@@ -225,6 +225,25 @@ export default {
 </script>
 
 <style scoped>
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card {
+  animation: cardEnter 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) var(--anim-delay, 0s) both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+}
+
 .page-header {
   margin-bottom: 1.5rem;
 }

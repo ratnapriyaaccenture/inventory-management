@@ -10,7 +10,7 @@
     <div v-else>
       <!-- Revenue & Financial KPIs -->
       <div class="stats-grid-finance">
-        <div class="stat-card revenue-card">
+        <div class="stat-card revenue-card" :style="{ '--anim-delay': '0ms' }">
           <div class="stat-label">{{ t('finance.totalRevenue') }}</div>
           <div class="stat-value">{{ formatCurrency(revenueMetrics.totalRevenue) }}</div>
           <div class="stat-change positive">
@@ -18,17 +18,17 @@
             {{ t('finance.fromOrders', { count: revenueMetrics.orderCount }) }}
           </div>
         </div>
-        <div class="stat-card cost-card">
+        <div class="stat-card cost-card" :style="{ '--anim-delay': '90ms' }">
           <div class="stat-label">{{ t('finance.totalCosts') }}</div>
           <div class="stat-value">{{ formatCurrency(totalCosts) }}</div>
           <div class="stat-meta">{{ t('finance.costBreakdown') }}</div>
         </div>
-        <div class="stat-card profit-card">
+        <div class="stat-card profit-card" :style="{ '--anim-delay': '180ms' }">
           <div class="stat-label">{{ t('finance.netProfit') }}</div>
           <div class="stat-value">{{ formatCurrency(netProfit) }}</div>
           <div class="stat-meta">{{ profitMargin }}% {{ t('finance.margin') }}</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" :style="{ '--anim-delay': '270ms' }">
           <div class="stat-label">{{ t('finance.avgOrderValue') }}</div>
           <div class="stat-value">{{ formatCurrency(revenueMetrics.avgOrderValue) }}</div>
           <div class="stat-meta">{{ t('finance.perOrderRevenue') }}</div>
@@ -36,7 +36,7 @@
       </div>
 
       <!-- Monthly Revenue vs Cost Chart -->
-      <div class="card chart-card">
+      <div class="card chart-card" :style="{ '--anim-delay': '380ms' }">
         <div class="card-header">
           <h3 class="card-title">{{ t('finance.revenueVsCosts.title') }}</h3>
           <div class="chart-legend">
@@ -67,7 +67,7 @@
       </div>
 
       <!-- Monthly Cost Flow Chart -->
-      <div class="card chart-card">
+      <div class="card chart-card" :style="{ '--anim-delay': '480ms' }">
         <div class="card-header">
           <h3 class="card-title">{{ t('finance.monthlyCostFlow.title') }}</h3>
           <div class="chart-legend">
@@ -104,7 +104,7 @@
 
       <div class="two-column-grid">
         <!-- Category Spending Breakdown -->
-        <div class="card">
+        <div class="card" :style="{ '--anim-delay': '560ms' }">
           <div class="card-header">
             <h3 class="card-title">{{ t('finance.categorySpending.title') }}</h3>
           </div>
@@ -128,7 +128,7 @@
         </div>
 
         <!-- Recent Transactions -->
-        <div class="card transactions-card">
+        <div class="card transactions-card" :style="{ '--anim-delay': '620ms' }">
           <div class="card-header">
             <h3 class="card-title">{{ t('finance.transactions.title') }}</h3>
           </div>
@@ -492,6 +492,35 @@ export default {
 </script>
 
 <style scoped>
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.stat-card {
+  animation: cardEnter 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) var(--anim-delay, 0s) both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+}
+
+.card {
+  animation: cardEnter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--anim-delay, 0s) both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card, .card { animation: none; }
+}
+
 .stat-change {
   margin-top: 0.75rem;
   font-size: 0.875rem;

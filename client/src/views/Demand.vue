@@ -9,7 +9,7 @@
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else>
       <div class="demand-trend-cards">
-        <div class="trend-card increasing-card">
+        <div class="trend-card increasing-card" :style="{ '--anim-delay': '0ms' }">
           <div class="trend-header">
             <div class="trend-icon">↑</div>
             <div>
@@ -28,7 +28,7 @@
           </div>
         </div>
 
-        <div class="trend-card stable-card">
+        <div class="trend-card stable-card" :style="{ '--anim-delay': '90ms' }">
           <div class="trend-header">
             <div class="trend-icon">→</div>
             <div>
@@ -47,7 +47,7 @@
           </div>
         </div>
 
-        <div class="trend-card decreasing-card">
+        <div class="trend-card decreasing-card" :style="{ '--anim-delay': '180ms' }">
           <div class="trend-header">
             <div class="trend-icon">↓</div>
             <div>
@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" :style="{ '--anim-delay': '300ms' }">
         <div class="card-header">
           <h3 class="card-title">{{ t('demand.demandForecasts') }}</h3>
         </div>
@@ -231,16 +231,27 @@ export default {
   margin-bottom: 2rem;
 }
 
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .trend-card {
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 1.5rem;
-  transition: all 0.2s ease;
+  animation: cardEnter 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) var(--anim-delay, 0s) both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .trend-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trend-card { animation: none; }
 }
 
 .increasing-card {

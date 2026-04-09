@@ -11,7 +11,7 @@
       <div class="kpi-section">
         <h3 class="section-title">{{ t('dashboard.kpi.title') }}</h3>
         <div class="kpi-grid">
-          <div class="kpi-card">
+          <div class="kpi-card" :style="{ '--anim-delay': '0ms' }">
             <div class="kpi-header">
               <span class="kpi-label">{{ t('dashboard.kpi.inventoryTurnover') }}</span>
             </div>
@@ -22,7 +22,7 @@
             </div>
           </div>
 
-          <div class="kpi-card">
+          <div class="kpi-card" :style="{ '--anim-delay': '80ms' }">
             <div class="kpi-header">
               <span class="kpi-label">{{ t('dashboard.kpi.ordersFulfilled') }}</span>
             </div>
@@ -33,7 +33,7 @@
             </div>
           </div>
 
-          <div class="kpi-card">
+          <div class="kpi-card" :style="{ '--anim-delay': '160ms' }">
             <div class="kpi-header">
               <span class="kpi-label">{{ t('dashboard.kpi.orderFillRate') }}</span>
             </div>
@@ -44,7 +44,7 @@
             </div>
           </div>
 
-          <div class="kpi-card">
+          <div class="kpi-card" :style="{ '--anim-delay': '240ms' }">
             <div class="kpi-header">
               <span class="kpi-label">{{ t(selectedPeriod === 'all' ? 'dashboard.kpi.revenueYTD' : 'dashboard.kpi.revenueMTD') }}</span>
             </div>
@@ -55,7 +55,7 @@
             </div>
           </div>
 
-          <div class="kpi-card">
+          <div class="kpi-card" :style="{ '--anim-delay': '320ms' }">
             <div class="kpi-header">
               <span class="kpi-label">{{ t('dashboard.kpi.avgProcessingTime') }}</span>
             </div>
@@ -76,7 +76,7 @@
       <!-- Charts Grid -->
       <div class="charts-grid">
         <!-- Order Health Dashboard -->
-        <div class="card chart-card">
+        <div class="card chart-card" :style="{ '--anim-delay': '440ms' }">
           <div class="card-header">
             <h3 class="card-title">{{ t('dashboard.orderHealth.title') }}</h3>
           </div>
@@ -138,7 +138,7 @@
         </div>
 
         <!-- Inventory by Category -->
-        <div class="card chart-card">
+        <div class="card chart-card" :style="{ '--anim-delay': '520ms' }">
           <div class="card-header">
             <h3 class="card-title">{{ t('dashboard.inventoryValue.title') }}</h3>
           </div>
@@ -158,7 +158,7 @@
         </div>
 
         <!-- Inventory Shortages -->
-        <div class="card chart-card full-width">
+        <div class="card chart-card full-width" :style="{ '--anim-delay': '600ms' }">
           <div class="card-header">
             <h3 class="card-title">{{ t('dashboard.inventoryShortages.title') }} ({{ backlogItems.length }})</h3>
           </div>
@@ -231,7 +231,7 @@
         </div>
 
         <!-- Top Products Table -->
-        <div class="card chart-card full-width">
+        <div class="card chart-card full-width" :style="{ '--anim-delay': '680ms' }">
           <div class="card-header">
             <h3 class="card-title">{{ t('dashboard.topProducts.title') }}</h3>
           </div>
@@ -758,11 +758,37 @@ export default {
   gap: 1rem;
 }
 
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .kpi-card {
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 1rem;
+  animation: cardEnter 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) var(--anim-delay, 0s) both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  animation: cardEnter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--anim-delay, 0s) both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kpi-card, .card { animation: none; }
 }
 
 .kpi-header {

@@ -9,7 +9,7 @@
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else>
       <!-- Quarterly Performance -->
-      <div class="card">
+      <div class="card" :style="{ '--anim-delay': '0ms' }">
         <div class="card-header">
           <h3 class="card-title">Quarterly Performance</h3>
         </div>
@@ -42,7 +42,7 @@
       </div>
 
       <!-- Monthly Trends Chart -->
-      <div class="card">
+      <div class="card" :style="{ '--anim-delay': '100ms' }">
         <div class="card-header">
           <h3 class="card-title">Monthly Revenue Trend</h3>
         </div>
@@ -63,7 +63,7 @@
       </div>
 
       <!-- Month-over-Month Comparison -->
-      <div class="card">
+      <div class="card" :style="{ '--anim-delay': '200ms' }">
         <div class="card-header">
           <h3 class="card-title">Month-over-Month Analysis</h3>
         </div>
@@ -103,19 +103,19 @@
 
       <!-- Summary Stats -->
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" :style="{ '--anim-delay': '340ms' }">
           <div class="stat-label">Total Revenue (YTD)</div>
           <div class="stat-value">${{ formatNumber(totalRevenue) }}</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" :style="{ '--anim-delay': '420ms' }">
           <div class="stat-label">Avg Monthly Revenue</div>
           <div class="stat-value">${{ formatNumber(avgMonthlyRevenue) }}</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" :style="{ '--anim-delay': '500ms' }">
           <div class="stat-label">Total Orders (YTD)</div>
           <div class="stat-value">{{ totalOrders }}</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" :style="{ '--anim-delay': '580ms' }">
           <div class="stat-label">Best Performing Quarter</div>
           <div class="stat-value">{{ bestQuarter }}</div>
         </div>
@@ -413,11 +413,26 @@ export default {
   margin-top: 1.5rem;
 }
 
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
+}
+
+.card {
+  animation: cardEnter 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) var(--anim-delay, 0s) both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
 }
 
 .stat-card {
@@ -426,6 +441,17 @@ export default {
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border-left: 4px solid #3b82f6;
+  animation: cardEnter 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) var(--anim-delay, 0s) both;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .stat-card { animation: none; }
 }
 
 .stat-label {
